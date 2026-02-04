@@ -1,36 +1,34 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
-
+import React, { useRef, useEffect } from "react";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import "animate.css";
-import Header from "./components/header";
-import Home from "./pages/Home";
-import Footer from "./components/footer";
-import AboutUs from "./pages/about";
-import ClaimWinnings from "./pages/claim";
-import ContactUs from "./components/contact";
-import Winners from "./pages/winners";
-import ManageWinners from "./pages/manage";
+import Love from "./components/love.js";
 
+import Valentine from "./components/home";
+import song from "./assets/John-Legend-–-All-Of-Me.mp3";
 
 const App: React.FC = () => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Try autoplay when the app loads
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.2; // start softly
+      audioRef.current.play().catch(() => {
+        // will play on first click if blocked
+      });
+    }
+  }, []);
+
   return (
     <Router>
+      {/* Global background music */}
+      <audio ref={audioRef} src={song} loop />
+
       <div className="font-sans">
-        <Header/>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="about" element={<AboutUs />} />
-          <Route path="prize-claim" element={<ClaimWinnings />} />
-          <Route path="contact" element={<ContactUs />} />
-          <Route path="winners" element={<Winners />} />
-          <Route path="admin" element={<ManageWinners />} />
+          <Route path="/" element={<Valentine />} />
+          <Route path="/love" element={<Love />} />
         </Routes>
-        <Footer/>
-        <Link to="/prize-claim"
-          className="fixed bottom-4 right-4 bg-black text-white px-6 py-3  shadow-lg text-lg font-semibold  hover:bg-blue-800 "
-        >
-          Claim Prize
-        </Link>
       </div>
     </Router>
   );
